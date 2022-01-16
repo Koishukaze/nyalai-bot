@@ -1,12 +1,12 @@
 {
   "name": "nyalabot",
   "version": "1.0.0",
-  "description": "",
+  "description": "A discord bot",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Koishukaze",
   "license": "ISC",
   "dependencies": {
     "discord.js": "^13.6.0",
