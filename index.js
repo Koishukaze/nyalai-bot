@@ -1,43 +1,28 @@
-const Discord = require('discord.js');
+const Discord = require("discord.js")
 require("dotenv").config()
 
 const client = new Discord.Client({
     intents: [
         "GUILDS",
-        "GUILD_MESSAGES"
+        "GUILD_MESSAGES",
     ]
 })
 
-//Sends startup message in console
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}`)
-})
-
-//Sets bot prefix to designated character
-const prefix = ';';
-const fs = require('fs');
-
-client.commands = new Discord.Collection();
-
-//Reads commands in commands folder
-const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-
-    client.commands.set(command.name, command);
+let bot = {
+    client, 
+    prefix: ";",
+    owners: ["133203646983831552"]
 }
 
-//Executes indiviudal command in commands folder
-client.on('messageCreate', message => {
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+client.commands = new Discord.Collection()
+client.events = new Discord.Collection()
 
-    const args = message.content.slice(prefix.length).split(/ +/);
-    const command = args.shift().toLowerCase();
+client.loadEvents = (bot, reload) => require("./handlers/events")(bot, reload)
+client.loadCommands = (bot, reload) => require("./handlers/commands")(bot, reload)
 
-    if (command === 'ping') {
-        client.commands.get('ping').execute(message, args);
-    }
-});
+client.loadEvents(bot, false)
+client.loadCommands(bot, false)
 
-//Login token
-client.login(process.env.TOKEN);
+module.exports = bot
+
+client.login(process.env.TOKEN)
